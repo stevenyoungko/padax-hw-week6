@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首頁</title>
+  <link href="/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <header class="header">
+    <a>歡迎光臨，請註冊登入系統</a>
+  </header>
+  <div class="main">
+    <div class="view">
+      <h2>註冊帳號</h2>
+      <form action="/signup" method="POST" class="form">
+        <div class="form-item">
+          <span>姓名</span>  
+          <input type="text" name="name" class="form-item-input">
+        </div>
+        <div class="form-item">
+          <span>帳號</span>
+          <input type="text" name="username" class="form-item-input">
+        </div>
+        <div class="form-item">
+          <span>密碼</span>
+          <input type="password" name="password" class="form-item-input">
+        </div>
+        <div class="form-item">
+          <button class="form-item-button">註冊</button>
+        </div>
+      </form>
+    </div>
+    <hr>
+    <div class="view">
+      <h2>登入系統</h2>
+      <form action="/signin" method="POST" class="form">
+        <div class="form-item">
+          <span>帳號</span>  
+          <input type="text" name="username" class="form-item-input">
+        </div>
+        <div class="form-item">
+          <span>密碼</span>
+          <input type="password" name="password" class="form-item-input">
+        </div>
+        <div class="form-item">
+          <button class="form-item-button">登入</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
