@@ -4,6 +4,7 @@ from flask import redirect
 from flask import render_template
 from flask import session
 import os
+import json
 import mysql.connector
 
 mydb = mysql.connector.connect(
@@ -15,6 +16,26 @@ mydb = mysql.connector.connect(
 
 app = Flask( __name__, static_folder='static', static_url_path='/')
 app.config['SECRET_KEY'] = os.urandom(24)
+
+@app.route("/api/users")
+def users():
+  username = request.args.get("username", "")
+  mycursor = mydb.cursor(dictionary=True)
+  mycursor.execute( "SELECT * FROM user WHERE username = %s", (username,))
+  myresult = mycursor.fetchone()
+  if (myresult):
+    value = {
+      "data": {
+        "id": myresult['id'],
+        "name": myresult['name'],
+        "username": myresult['username']
+      }
+    }
+  else:
+    value = {
+      "data": None
+    }
+  return json.dumps(value, ensure_ascii=False)
 
 @app.route('/')
 def index():

@@ -12,12 +12,42 @@
   </header>
   <div class="main">
     <div class="view">
-      <h1>{{ data }}，歡迎登入系統</h1>
-      <h1>
+      <p>{{ data }}，歡迎登入系統</p>
+      <h3>
         <a href="/signout">登出系統</a>
-      </h1>
+      </h3>
+      <h3>查詢會員姓名</h3>
+      <form class="form" id='form' style="flex-direction: row;">
+        <div class="form-item" style="margin-right: 8px;">
+          <input id=name type="text" name="name" class="form-item-input">
+        </div>
+        <div class="form-item">
+          <input type="button" value="查詢" data-action="submit">
+        </div>
+      </form>
     </div>
   </div>
-  </div>
+  <script>
+    const submitBtn = document.querySelector('[data-action="submit"]')
+    submitBtn.addEventListener('click', processFormData)
+
+    async function processFormData(e) {
+      const form = document.forms['form']
+      const name = form.elements.name.value
+      
+      const url = `http://127.0.0.1:3000/api/users?username=${name}`
+      const res = await fetch(url)
+      const { data } = await res.json()
+      
+      renderData(data, name)
+    }
+
+    function renderData(data, name) {
+      let view = document.querySelector('.view')
+      let h3Cell = document.createElement('h3')
+      h3Cell.textContent = data.name + ' (' + name + ')'
+      view.append(h3Cell)
+    }
+  </script>
 </body>
 </html>
