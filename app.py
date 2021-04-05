@@ -37,6 +37,25 @@ def users():
     }
   return json.dumps(value, ensure_ascii=False)
 
+@app.route("/api/user", methods=['POST'])
+def user():
+  data = request.get_json()
+  newName = data['name']
+  originName = session.get('name')
+  mycursor = mydb.cursor(dictionary=True)
+  mycursor.execute( "UPDATE user SET name = %s WHERE name = %s", (newName, originName, ))
+  mydb.commit()
+  if (mycursor.rowcount):
+    value = {
+      "ok": True
+    }
+  else:
+    value = {
+      "error": True
+    }
+  return json.dumps(value)
+
+
 @app.route('/')
 def index():
   return render_template('index.html')

@@ -12,12 +12,15 @@
   </header>
   <div class="main">
     <div class="view">
-      <p>{{ data }}，歡迎登入系統</p>
+      <p>
+        <span id="title-name">{{ data }}</span>
+        <span>，歡迎登入系統</span>
+      </p>
       <h3>
         <a href="/signout">登出系統</a>
       </h3>
       <h3>查詢會員姓名</h3>
-      <form class="form" id='form' style="flex-direction: row;">
+      <form class="form" id='searchform' style="flex-direction: row;">
         <div class="form-item" style="margin-right: 8px;">
           <input id=name type="text" name="name" class="form-item-input">
         </div>
@@ -25,14 +28,54 @@
           <input type="button" value="查詢" data-action="submit">
         </div>
       </form>
+      <h3>更新我的姓名</h3>
+      <form class="form" id='updateform' style="flex-direction: row;">
+        <div class="form-item" style="margin-right: 8px;">
+          <input id=name type="text" name="name" class="form-item-input" placeholder="輸入新的姓名">
+        </div>
+        <div class="form-item">
+          <input type="button" value="查詢" data-action="update">
+        </div>
+      </form>
     </div>
   </div>
   <script>
     const submitBtn = document.querySelector('[data-action="submit"]')
-    submitBtn.addEventListener('click', processFormData)
+    submitBtn.addEventListener('click', submit)
 
-    async function processFormData(e) {
-      const form = document.forms['form']
+    const updateBtn = document.querySelector('[data-action="update"]')
+    updateBtn.addEventListener('click', update)
+
+    function update(e) {
+      const form = document.forms['updateform']
+      let name = form.elements.name.value
+
+      postData('http://127.0.0.1:3000/api/user', name)
+        .then(data => {
+          document.getElementById('title-name').innerText = name
+          form.elements.name.value = ''
+          let view = document.querySelector('.view')
+          let pCell = document.createElement('p')
+          pCell.textContent = '更新成功'
+          view.append(pCell)
+        })
+        .catch(error => console.log(error))
+    }
+
+    function postData(url, name) {
+      return fetch(url, {
+        body: JSON.stringify({name}),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        cache: "no-cache"
+      })
+      .then(response => response.json())
+    }
+
+    async function submit(e) {
+      const form = document.forms['searchform']
       const name = form.elements.name.value
       
       const url = `http://127.0.0.1:3000/api/users?username=${name}`
